@@ -44,21 +44,22 @@ class AuthApiController extends Controller
             'username' => 'required|max:225',
             'password' => 'required|max:225',
             'email' => 'required|email|max:50',
-            'role_id' => 'required|in:1,2,3',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid input! Please check back!', 'errors' => $validator->errors()], 422);
         }
 
-        $status = $request->input('role_id') == 3 ? 'active' : 'inactive';
+        // Role_id is automatically set to 3
+        $role_id = 3;
+        $status = 'active';
         $hashedPassword = Hash::make($request->input('password'));
 
         $user = User::create([
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => $hashedPassword,
-            'role_id' => $request->input('role_id'),
+            'role_id' => $role_id,
             'status' => $status,
         ]);
 

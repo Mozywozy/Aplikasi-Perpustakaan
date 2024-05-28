@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
+
+.custom-border {
+    height: 40px;
+    border: 1px solid #cdd0d3;
+    outline: none;
+}
+
+.custom-border:focus {
+    border-color: #ced4da;
+    box-shadow: none; 
+}
+
+.judul-abk{
+    font-family: "Trocchi", serif;
+    font-size: 25px;
+    font-weight: bold;
+}
+

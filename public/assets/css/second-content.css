@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
+
+.second-section {
+    background-color: #f2f2f2;
+    padding: 50px;
+}
+
+.content-ss {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-content-ss h1{
+    font-family: "Trocchi", serif;
+    font-size: 35px;
+    font-weight: 700;
+    text-align: center;
+}
+.text-content-ss p{
+    text-align: center;
+}
+
+.card-content {
+    display: flex;
+    margin-top: 50px;
+    flex-wrap: wrap; /* Mengatur agar kartu-kartu tersebut dapat berada dalam beberapa baris */
+    gap: 20px; /* Jarak antara kartu */
+}
+
+.card-title{
+    text-align: center;
+}
+
+.card {
+    flex: 1; /* Kartu menjadi fleksibel */
+    max-width: 300px; /* Atur lebar maksimum kartu */
+}
+
+.btn-sm{
+    margin-top: 40px;
+}
+
+/* third content */
+.third-section {
+    padding: 50px;
+}
+
+.content-ts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-content-ts {
+    flex: 1;
+    margin-left: 10px; /* Memberikan jarak antara teks dan gambar */
+}
+
+.text-content-ts h2{
+    font-family: "Trocchi", serif;
+    font-size: 55px;
+    font-weight: 700;
+}
+
+.image-content-ts {
+    flex: 1;
+}
+
+.hero-image {
+    max-width: 450px; /* Atur lebar maksimum gambar */
+    width: 200%; /* Agar gambar responsif */
+}

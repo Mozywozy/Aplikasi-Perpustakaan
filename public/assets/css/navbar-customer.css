@@ -1,0 +1,71 @@
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.btn {
+    margin-top: 10px; /* Memberikan jarak antara teks dan tombol */
+}
+
+.navbar-nav {
+    gap: 30px;
+}
+
+.hero {
+    /* background-color: #f2f2f2; */
+    padding: 50px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff; /* Warna garis bawah */
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff; /* Warna teks saat hover */
+}
+
+.navbar-nav .nav-link.active {
+    color: #ffffff; /* Warna teks saat aktif */
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(1);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff; /* Warna garis bawah */
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-in-out;
+}
+

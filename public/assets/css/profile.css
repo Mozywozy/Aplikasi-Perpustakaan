@@ -1,0 +1,105 @@
+.container-profile {
+    border: 1px solid #e0e0e0;
+    padding: 50px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: .30rem;
+}
+
+.info {
+    background-color: rgba(255, 255, 255, 0.829); /* White with 80% opacity */
+    color: black;
+    border-radius: 0.25rem;
+}
+
+.overlay-icon {
+    color: white;
+}
+
+.card:hover .overlay {
+    opacity: 1;
+}
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-picture {
+    margin-left: 30%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: auto;
+}
+
+.btn-edit-profile {
+    margin-top: 10px;
+}
+
+.card-status {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.card-status.pending {
+    color: orange;
+}
+
+.card-status.approved {
+    color: green;
+}
+
+.card-status.rejected {
+    color: red;
+}
+
+.card {
+    width: 240px;
+}
+
+.card-text {
+    font-size: 15px;
+}
+
+.card-title {
+    font-size: 15px
+}
+
+.custom-border {
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    padding: .375rem .75rem;
+    outline: none;
+}
+
+.custom-border:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+}

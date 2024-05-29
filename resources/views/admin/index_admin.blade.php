@@ -115,7 +115,7 @@
                 <tr>
                     <th data-formatter="iterator">No</th>
                     <th data-field="username">Nama</th>
-                    <th data-field="role_id">Role id</th>
+                    <th data-field="role.role_name">Role</th>
                     <th data-field="status" data-formatter="statusFormatter">Status</th>
                     <th data-formatter="buttonFormatter">Action</th>
                 </tr>

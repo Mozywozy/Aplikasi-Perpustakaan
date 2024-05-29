@@ -25,7 +25,7 @@ class AdminController extends Controller
 
     public function getAll()
     {
-        $users = User::all();
+        $users = User::with('role')->get();
         return response()->json($users);
     }
 

@@ -31,6 +31,8 @@
                     <span class="badge bg-danger">Rejected</span>
                     @elseif($peminjaman->status == 'buku harus dikembalikan')
                     <span class="badge bg-danger">Buku harus dikembalikan</span>
+                    @elseif($peminjaman->status == 'buku sudah dikembalikan')
+                    <span class="badge bg-secondary">Buku sudah dikembalikan</span>
                     @endif
                 </td>
                 <td>
@@ -106,12 +108,19 @@
                         <option value="Normal">Normal</option>
                         <option value="Rusak">Rusak</option>
                         <option value="Hilang">Hilang</option>
+                        <option value="Telat">Telat</option>
                     </select>
+                    <div class="mt-3 d-none" id="telatInfo"> <!-- Hidden by default -->
+                        <label for="jumlah_hari_telat_{{ $peminjaman->peminjaman_id }}" class="form-label">Jumlah Hari Telat</label>
+                        <input type="number" class="form-control" id="jumlah_hari_telat_{{ $peminjaman->peminjaman_id }}" name="jumlah_hari_telat">
+                    </div>  
                     <div class="mt-3">
                         <label for="denda_{{ $peminjaman->peminjaman_id }}" class="form-label">Denda</label>
                         <input type="text" class="form-control" id="denda_{{ $peminjaman->peminjaman_id }}" name="denda"
                             readonly>
                     </div>
+                    <input type="hidden" class="form-control tanggal-pengembalian" id="tanggal_pengembalian_{{ $peminjaman->peminjaman_id }}"
+                        value="{{ $peminjaman->tanggal_pengembalian }}" readonly>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -133,14 +142,39 @@
         $('.form-select').select2();
         $('.kondisi-buku').on('change', function () {
             var kondisiBuku = $(this).val();
-            var dendaInput = $(this).closest('.modal-body').find('input[name="denda"]');
+            var modalBody = $(this).closest('.modal-body');
+            var dendaInput = modalBody.find('input[name="denda"]');
+            var jumlahHariTelatInput = modalBody.find('input[name="jumlah_hari_telat"]');
+            var tanggalPengembalian = modalBody.find('.tanggal-pengembalian').val();
+            var denda = 0;
 
-            if (kondisiBuku === 'Normal') {
-                dendaInput.val(0);
-            } else if (kondisiBuku === 'Rusak') {
-                dendaInput.val(30000);
+            if (kondisiBuku === 'Rusak') {
+                denda += 30000;
             } else if (kondisiBuku === 'Hilang') {
-                dendaInput.val(100000);
+                denda += 100000;
+            } else if (kondisiBuku === 'Telat') {
+                // Tampilkan elemen untuk memasukkan jumlah hari telat
+                modalBody.find('#telatInfo').removeClass('d-none');
+                var jumlahHariTelat = parseInt(jumlahHariTelatInput.val());
+                denda += jumlahHariTelat * 5000;
+            } else {
+                // Sembunyikan elemen untuk memasukkan jumlah hari telat jika bukan "Telat"
+                modalBody.find('#telatInfo').addClass('d-none');
+            }
+
+            dendaInput.val(denda);
+        });
+
+        // Tambahkan penanganan perubahan pada input jumlah hari telat
+        $('input[name="jumlah_hari_telat"]').on('input', function() {
+            var modalBody = $(this).closest('.modal-body');
+            var kondisiBuku = modalBody.find('.kondisi-buku').val();
+            var dendaInput = modalBody.find('input[name="denda"]');
+            var jumlahHariTelat = parseInt($(this).val());
+
+            if (kondisiBuku === 'Telat') {
+                var denda = jumlahHariTelat * 5000;
+                dendaInput.val(denda);
             }
         });
     });

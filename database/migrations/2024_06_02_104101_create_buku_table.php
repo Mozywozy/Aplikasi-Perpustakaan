@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('buku', function (Blueprint $table) {
-            $table->id('buku_id');
-            $table->string('judul');
-            $table->string('penerbit');
-            $table->string('status');
-            $table->integer('stock');
-            $table->string('cover')->nullable();
-            $table->timestamps();
+            $table->increments('buku_id');
+            $table->string('judul', 100);
+            $table->string('penerbit', 100);
+            $table->enum('status', ['In Stock', 'Out Stock']);
+            $table->integer('stock')->nullable();
+            $table->string('cover', 225)->nullable();
         });
     }
 

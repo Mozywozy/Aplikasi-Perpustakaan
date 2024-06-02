@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
 
-
 .text-content {
     flex: 1;
     display: flex;
-    flex-direction: column; /* Mengatur tata letak ke vertikal */
+    flex-direction: column;
     align-items: flex-start;
-    flex: 1;
     margin-left: 90px;
     font-style: normal;
 }
@@ -28,7 +26,24 @@
 
 .hero-image {
     max-width: 450px;
-    /* Atur lebar maksimum gambar */
     width: 100%;
-    /* Agar gambar responsif */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .text-content {
+        margin-left: 20px;
+    }
+
+    .judul {
+        font-size: 40px;
+    }
+
+    .kedua {
+        font-size: 20px;
+    }
+
+    .hero-image {
+        max-width: 100%;
+    }
 }

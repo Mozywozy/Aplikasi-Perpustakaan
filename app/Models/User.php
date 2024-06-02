@@ -51,4 +51,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(UlasanBuku::class, 'user_id', 'user_id');
     }
+
+    public function delete()
+    {
+        // Hapus semua ulasan buku terkait
+        $this->ulasanBuku()->delete();
+
+        // Hapus pengguna
+        return parent::delete();
+    }
 }

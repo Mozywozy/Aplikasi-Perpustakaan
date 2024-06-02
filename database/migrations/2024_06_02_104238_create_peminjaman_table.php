@@ -12,15 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('peminjaman', function (Blueprint $table) {
-            $table->id('peminjaman_id');
-            $table->foreignId('buku_id')->constrained('buku', 'buku_id')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
+            $table->increments('peminjaman_id');
+            $table->unsignedInteger('buku_id');
+            $table->unsignedInteger('user_id');
             $table->date('tanggal_peminjaman');
             $table->date('tanggal_pengembalian');
-            $table->string('kondisi_buku');
-            $table->string('status');
-            $table->decimal('denda', 8, 2)->default(0);
-            $table->timestamps();
+            $table->enum('kondisi_buku', ['Rusak', 'Normal', 'Hilang', 'Telat']);
+            $table->string('status', 50)->default('pending');
+            $table->integer('denda')->default(0);
+            $table->foreign('buku_id')->references('buku_id')->on('buku');
+            $table->foreign('user_id')->references('id')->on('user');
         });
     }
 

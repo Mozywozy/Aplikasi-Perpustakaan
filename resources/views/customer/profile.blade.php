@@ -44,7 +44,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $peminjaman->buku->judul }}</h5>
                             <p class="card-text">Pengembalian: {{ $peminjaman->tanggal_pengembalian }}</p>
-                            <p class="card-text card-status {{ $peminjaman->status }}">
+                            <p class="card-text card-status {{ str_replace(' ', '-', strtolower($peminjaman->status)) }}">
                                 Status: {{ ucfirst($peminjaman->status) }}
                             </p>
                             {{-- Kondisi untuk menghilangkan tombol ulasan di sini --}}

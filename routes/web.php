@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\UlasanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
 
 /*
@@ -52,7 +53,7 @@ Route::middleware('auth')->group(function () {
 
         Route::put('admin.index_admin/{id}', [AdminController::class, 'updateUser']);
         Route::post('admin.index_admin', [AdminController::class, 'store']);
-        Route::delete('admin/delete/{id}', [AdminController::class, 'destroyData'])->name('user.delete');
+        Route::delete('admin/delete/{id}', [UserController::class, 'destroyData'])->name('user.delete');
 
         Route::get('books', [BookController::class, 'getAll']);
         Route::get('book-add', [BookController::class, 'add']);
@@ -110,5 +111,7 @@ Route::middleware('auth')->group(function () {
         Route::put('profile/{id}', [CustomerController::class, 'updateProfile'])->name('profile.update');
         Route::post('/peminjaman/store', [CustomerController::class, 'storePeminjaman'])->name('peminjaman.store');
         Route::post('/ulasan/store', [UlasanController::class, 'store'])->name('ulasan.store');
+        Route::get('/book/{id}/details', [CustomerController::class, 'getBookDetails']);
+        Route::get('/book/{id}', [CustomerController::class, 'getBookDetails'])->name('books.show');
     });
 });

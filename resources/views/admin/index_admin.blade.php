@@ -180,7 +180,7 @@
         function buttonFormatter(value, row) {
             // console.log(row);
             return `<a href="#" class='btn btn-warning btn-edit' data-id='${row.user_id}' data-nama-kategori='${row.user_id}'>Edit</a>` +
-                ` <but ton class='btn btn-danger' data-id='${row.user_id}' onclick='deleteData(this)'>Delete</button>`;
+                ` <button class='btn btn-danger' data-id='${row.user_id}' onclick='deleteData(this)'>Delete</button>`;
         }
 
         $(document).on('click', '.btn-edit', function() {

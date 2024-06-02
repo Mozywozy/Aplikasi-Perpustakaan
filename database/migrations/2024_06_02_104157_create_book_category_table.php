@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('book_category', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('buku_id')->constrained('buku', 'buku_id')->onDelete('cascade');
-            $table->foreignId('kategori_id')->constrained('kategori', 'kategori_id')->onDelete('cascade');
+            $table->increments('id');
+            $table->unsignedInteger('buku_id');
+            $table->unsignedInteger('kategori_id');
             $table->timestamps();
+            $table->foreign('buku_id')->references('buku_id')->on('buku');
+            $table->foreign('kategori_id')->references('kategori_id')->on('kategori');
         });
     }
 

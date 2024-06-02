@@ -56,6 +56,13 @@ class CustomerController extends Controller
         return view('customer.allbook', ['categories' => $categories, 'books' => $books]);
     }
 
+    public function getBookDetails($id)
+    {
+        $book = Buku::with('ulasanBuku.user')->findOrFail($id);
+        return view('partials.book_details', compact('book'));
+    }
+    
+
     public function profile()
     {
         $user = auth()->user();
@@ -162,7 +169,7 @@ class CustomerController extends Controller
         $peminjaman->save();
 
         Alert::success('Success', 'Terimakasih, Tunggu aproval dari petugas');
-        return redirect()->back();
+        return redirect()->route('allBook');
     }
 
     public function getUlasan()

@@ -5,24 +5,7 @@
 @section('content')
 
 <style>
-    .rating-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-        }
-
-        .rating-overlay i {
-            margin-bottom: 3px;
-            margin-right: 5px;
-        }
+   
 </style>
 
 <main>

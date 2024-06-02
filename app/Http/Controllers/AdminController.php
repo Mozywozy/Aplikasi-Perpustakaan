@@ -141,23 +141,27 @@ class AdminController extends Controller
     public function approve(Request $request, $id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
-        if ($peminjaman->status != 'approved') {
+        $tanggalPengembalian = Carbon::parse($request->input('tanggal_pengembalian'));
+        $tanggalSekarang = Carbon::now();
+
+        if ($peminjaman->status == 'pending') {
             $peminjaman->status = 'approved';
-            $peminjaman->tanggal_pengembalian = $request->input('tanggal_pengembalian'); // Simpan tanggal pengembalian
+            $peminjaman->tanggal_pengembalian = $tanggalPengembalian;
+
+            // Cek jika tanggal pengembalian sudah lewat
+            if ($tanggalPengembalian->lessThan($tanggalSekarang)) {
+                $peminjaman->status = 'buku harus dikembalikan';
+            }
+
             $peminjaman->save();
 
-            $buku = Buku::findOrFail($peminjaman->buku_id);
-            $buku->stock -= 1;
-            // Periksa apakah stok habis
-            if ($buku->stock == 0) {
-                $buku->status = 'Out Stock';
-            }
-            $buku->save();
-            // Stok buku akan berkurang otomatis oleh trigger di database
+            Alert::success('Success', 'Peminjaman buku telah disetujui.');
+            return redirect()->back()->with('success', 'Peminjaman buku telah disetujui.');
         }
-        Alert::success('Success', 'Peminjaman diapprove');
-        return redirect()->back()->with('success', 'Permintaan peminjaman berhasil disetujui.');
+
+        return redirect()->back()->with('error', 'Peminjaman tidak valid.');
     }
+
 
     public function reject(Request $request, $id)
     {
@@ -178,10 +182,18 @@ class AdminController extends Controller
             $kondisiBuku = $request->input('kondisi_buku');
             $denda = 0;
 
-            if ($kondisiBuku === 'Rusak') {
-                $denda = 30000;
+            // Tambahkan logika untuk menangani kondisi 'Telat'
+            if ($kondisiBuku === 'Telat') {
+                $tanggalPengembalian = Carbon::parse($peminjaman->tanggal_pengembalian);
+                $tanggalSekarang = Carbon::now();
+                $hariKeterlambatan = $tanggalPengembalian->diffInDays($tanggalSekarang);
+
+                // Hitung denda berdasarkan jumlah hari keterlambatan
+                $denda = $hariKeterlambatan * 5000; // Misalnya, asumsi denda Rp 5000 per hari
+            } elseif ($kondisiBuku === 'Rusak') {
+                $denda += 30000;
             } elseif ($kondisiBuku === 'Hilang') {
-                $denda = 100000;
+                $denda += 100000;
             }
 
             $peminjaman->status = 'buku sudah dikembalikan';
@@ -200,13 +212,12 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Buku berhasil dikembalikan.');
     }
 
-
-
     public function pinjam()
     {
         $peminjamanBelumDiproses = Peminjaman::all();
         return view('admin.pinjam-admin', compact('peminjamanBelumDiproses'));
     }
+
 
     public function destroyBuku($id)
     {

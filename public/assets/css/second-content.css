@@ -72,3 +72,63 @@
     max-width: 450px; /* Atur lebar maksimum gambar */
     width: 200%; /* Agar gambar responsif */
 }
+
+.rating-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+.rating-overlay i {
+    margin-bottom: 3px;
+    margin-right: 5px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .second-section {
+        padding: 20px;
+    }
+
+    .text-content-ss h1 {
+        font-size: 25px;
+    }
+
+    .card-content {
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .card {
+        max-width: 100%;
+    }
+
+    .third-section {
+        padding: 20px;
+    }
+
+    .content-ts {
+        flex-direction: column;
+    }
+
+    .text-content-ts {
+        margin-left: 0;
+    }
+
+    .text-content-ts h2 {
+        font-size: 30px;
+    }
+
+    .hero-image {
+        max-width: 100%;
+        width: 100%;
+    }
+}

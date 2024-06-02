@@ -80,6 +80,14 @@
     color: red;
 }
 
+.card-status.buku-sudah-dikembalikan {
+    color: blue;
+}
+
+.card-status.buku-harus-dikembalikan {
+    color: yellow;
+}
+
 .card {
     width: 240px;
 }
@@ -102,4 +110,25 @@
 .custom-border:focus {
     border-color: #80bdff;
     box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .container-profile {
+        padding: 20px;
+    }
+
+    .profile-picture {
+        margin-left: 0;
+        width: 100px;
+        height: 100px;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .card-text, .card-title {
+        font-size: 12px;
+    }
 }

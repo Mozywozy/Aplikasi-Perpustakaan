@@ -4,78 +4,6 @@
 
 @section('content')
 
-    <style>
-        .custom-border {
-            height: 40px;
-            border: 1px solid #cdd0d3;
-            outline: none;
-        }
-
-        .modal-backdrop.show {
-            opacity: 0.5;
-        }
-
-        .custom-border:focus {
-            border-color: #ced4da;
-            box-shadow: none;
-        }
-
-        .select-kategori {
-            height: 40px;
-        }
-
-        .blur-card {
-            filter: blur(2px);
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        .stock-unavailable {
-            position: absolute;
-            top: 50%;
-            left: 38%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .card-wrapper {
-            position: relative;
-        }
-
-        .card-stock-habis {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .rating-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-        }
-
-        .rating-overlay i {
-            margin-bottom: 3px;
-            margin-right: 5px;
-        }
-    </style>
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -121,8 +49,7 @@
                             @if ($book->stock > 0)
                                 <form action="{{ route('peminjaman.store') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="buku_id" value="{{ $book->buku_id }}">
-                                    <button type="submit" class="btn btn-primary">Pinjam Buku</button>
+                                    <a href="{{ route('books.show', ['id' => $book->buku_id]) }}" class="btn btn-primary">Lihat buku</a>
                                 </form>
                             @endif
                         </div>
@@ -134,7 +61,8 @@
             </div>
         @endforeach
     </div>
-    </div>
+    
+    
 
     @include('sweetalert::alert')
     @push('scripts')

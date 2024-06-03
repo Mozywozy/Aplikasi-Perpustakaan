@@ -41,6 +41,7 @@ class CustomerApiController extends Controller
                     $q->where('kategori.kategori_id', $kategori);
                 });
             })
+            ->with('kategori') // Load the relation
             ->get();
 
         $ratings = UlasanBuku::select('buku_id', DB::raw('AVG(rating) as average_rating'))
@@ -52,8 +53,27 @@ class CustomerApiController extends Controller
             $book->average_rating = $ratings->has($book->buku_id) ? $ratings[$book->buku_id]->average_rating : 0;
         }
 
-        return response()->json(['categories' => $categories, 'books' => $books]);
+        $formattedBooks = $books->map(function ($book) {
+            return [
+                'buku_id' => $book->buku_id,
+                'judul' => $book->judul,
+                'penerbit' => $book->penerbit,
+                'status' => $book->status,
+                'stock' => $book->stock,
+                'cover' => $book->cover,
+                'kategori' => $book->kategori->map(function ($category) {
+                    return [
+                        'kategori_id' => $category->kategori_id,
+                        'nama_kategori' => $category->nama_kategori,
+                    ];
+                }),
+                'average_rating' => $book->average_rating,
+            ];
+        });
+
+        return response()->json(['categories' => $categories, 'books' => $formattedBooks]);
     }
+
 
     public function profile()
     {

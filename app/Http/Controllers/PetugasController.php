@@ -51,19 +51,19 @@ class PetugasController extends Controller
         $validatedData = $request->validate([
             'nama_kategori' => 'required|unique:kategori,nama_kategori,' . $id . ',kategori_id|max:50'
         ]);
-    
+
         try {
             // Temukan kategori yang akan diperbarui
             $category = Kategori::findOrFail($id);
-    
+
             // Perbarui nama kategori
             $category->nama_kategori = $request->nama_kategori;
-    
+
             // Simpan perubahan
             $category->save();
-    
+
             Alert::success('Success', 'Category Behasil di Edit!');
-    
+
             // Berikan respons
             return $category;
         } catch (\Exception $e) {
@@ -77,7 +77,7 @@ class PetugasController extends Controller
         try {
             $category = Kategori::findOrFail($id);
             $category->delete();
-            
+
             Alert::success('Success', 'Category Behasil di hapus!');
             return $category;
         } catch (Exception $e) {
@@ -116,6 +116,11 @@ class PetugasController extends Controller
             'kategori_id.*' => 'exists:kategori,kategori_id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        // Proses cover image jika ada
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $newName = 'cover_' . time() . '.' . $image->getClientOriginalExtension(); // Generate a unique file name
@@ -124,41 +129,22 @@ class PetugasController extends Controller
             $newName = ''; // Default cover image name if no image is uploaded
         }
 
+        // Tentukan status berdasarkan stok
+        $status = $request->stock > 0 ? 'In Stock' : 'Out Stock';
+
         // Buat buku baru dengan data yang diterima
         $book = new Buku();
         $book->judul = $request->judul;
         $book->penerbit = $request->penerbit;
-        $book->status = $request->status;
+        $book->status = $status;
         $book->stock = $request->stock;
         $book->cover = $newName;
-        // Tentukan status berdasarkan stok
-        if ($request->stock > 0) {
-            $book->status = 'In Stock';
-        } else {
-            $book->status = 'Out Stock';
-        }
         $book->save();
 
-
-        // Jika validasi gagal, tampilkan SweetAlert
-        if ($validator->fails()) {
-            Alert::error('Error', 'already exists!');
-            return redirect('admin.books');
-        }
-
-        foreach ($request->kategori_id as $kategoriId) {
-            BukuCategory::create([
-                'buku_id' => $book->id,
-                'kategori_id' => $kategoriId
-            ]);
-        }
-
-        $book->kategori()->attach($request->kategori_id);
-
-        $request['cover'] = $newName;
+        // Menyinkronkan relasi dengan kategori
         $book->kategori()->sync($request->kategori_id);
-        Alert::success('Success', 'Book added successfully!');
 
+        Alert::success('Success', 'Book added successfully!');
         return redirect('petugas');
     }
 
@@ -304,9 +290,15 @@ class PetugasController extends Controller
     {
         try {
             $buku = Buku::findOrFail($id);
+
+            // Hapus entri terkait dalam tabel pivot
+            $buku->kategori()->detach();
+
+            // Hapus buku
             $buku->delete();
 
-            Alert::success('Success', 'Buku Behasil di hapus!');
+            Alert::success('Success', 'Buku berhasil dihapus!');
+            return response()->json(['success' => 'Buku berhasil dihapus!'], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

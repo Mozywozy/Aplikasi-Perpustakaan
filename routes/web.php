@@ -34,12 +34,17 @@ Route::post('/logout', [AuthController::class, 'destroy'])
 
 Route::middleware('only_guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
-    Route::post('login', [AuthController::class, 'authenticating']);
+    Route::post('login', [AuthController::class, 'authenticating'])->name('proses_login');
     Route::get('register', [AuthController::class, 'register']);
-    Route::post('register', [AuthController::class, 'registerProses']);
+    Route::post('register', [AuthController::class, 'registerProses'])->name('registerProses');
 });
 
 Route::middleware('auth')->group(function () {
+
+    // Route::get('login', [AuthController::class, 'login'])->name('login');
+    // Route::post('login', [AuthController::class, 'authenticating'])->name('proses_login');
+    // Route::get('register', [AuthController::class, 'register']);
+    // Route::post('register', [AuthController::class, 'registerProses']);
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('confirm-logout', [AuthController::class, 'confirmLogout'])->name('confirm.logout');
 
@@ -67,7 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/peminjaman/admin/{id}/approve', [AdminController::class, 'approve'])->name('admin.approve');
         Route::post('/peminjaman/admin/{id}/reject', [AdminController::class, 'reject'])->name('admin.reject');
         Route::post('/peminjaman/admin/return/{id}', [AdminController::class, 'returnBook'])->name('admin.return');
-        
+
         Route::get('/peminjaman/filter', [AdminController::class, 'filterPeminjaman'])->name('peminjaman.filter');
 
         Route::get('/peminjaman/export-pdf', [PeminjamanController::class, 'exportPDF'])->name('peminjaman.exportPDF');
@@ -86,7 +91,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('petugas/book/delete/{id}', [PetugasController::class, 'destroyBuku'])->name('buku.delete');
         Route::get('peminjaman-petugas', [PeminjamanController::class, 'index'])->name('petugas.peminjaman');
         Route::get('data-peminjaman', [PeminjamanController::class, 'dataRent'])->name('data-rent');
-        // 
+        //
         Route::get('book/{id}/reviews', [PetugasController::class, 'showReviews'])->name('book.reviews');
 
         // Rute untuk menyetujui atau menolak permintaan peminjaman oleh petugas
@@ -103,7 +108,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/books', [PeminjamanController::class, 'index'])->name('books.index');
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 
-    // ROUTE CUSTOMER   
+    // ROUTE CUSTOMER
     Route::middleware(['only_customer'])->group(function () {
         Route::get('customer', [CustomerController::class, 'customer'])->name('dashboard');
         Route::get('allBook', [CustomerController::class, 'getAllBook'])->name('allBook');

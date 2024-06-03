@@ -63,7 +63,7 @@
                   <p class="mb-0">Enter your email and password to register</p>
                 </div>
                 <div class="card-body">
-                  <form role="form" action="" method="post">
+                  <form role="form" action="{{route('registerProses')}}" method="post">
                     @csrf
                     <div class="input-group input-group-outline mb-3">
                       <label class="form-label" for="username">Name</label>
@@ -77,7 +77,7 @@
                       <label class="form-label" for="password">Password</label>
                       <input type="password" class="form-control" name="password" required>
                     </div>
-                    <select class="form-control" id="role" name="role_id" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem; margin-bottom: 2rem;"> 
+                    <select class="form-control" id="role" name="role_id" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem; margin-bottom: 2rem;">
                       <option value="1">Admin</option>
                       <option value="2">Petugas</option>
                       <option value="3">Customer</option>

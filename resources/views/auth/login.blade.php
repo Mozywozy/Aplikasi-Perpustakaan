@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <form role="form" class="text-start" action="" method="post">
+                <form role="form" class="text-start" action="{{ route('proses_login') }}" method="post">
                     @csrf
                     <div class="input-group input-group-outline my-3">
                         <label for="email" class="form-label">Email</label>
@@ -76,7 +76,7 @@
                     </p>
                 </form>
             </div>
-            
+
             </div>
           </div>
         </div>

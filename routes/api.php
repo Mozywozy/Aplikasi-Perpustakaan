@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\CustomerApiController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\LibraryController; 
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\UlasanController;
@@ -31,11 +31,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthApiController::class, 'login']);
 Route::post('register', [AuthApiController::class, 'register']);
+Route::get('bukus', [CustomerApiController::class, 'getAllBook']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthApiController::class, 'logout']);
     Route::get('customer', [CustomerApiController::class, 'customer']);
-    Route::get('books', [CustomerApiController::class, 'getAllBook']);
     Route::get('profile', [CustomerApiController::class, 'profile']);
     Route::post('profile/update/{id}', [CustomerApiController::class, 'updateProfile']);
     Route::post('peminjaman', [CustomerApiController::class, 'storePeminjaman']);
@@ -53,8 +53,8 @@ Route::get('/ulasan', [CustomerController::class, 'getUlasan'])->name('allUlasan
 
 Route::get('/users', [AdminController::class, 'getAll'])->name('getAllUser');
 Route::get('/books', [BookController::class, 'getAll'])->name('getAllBook');
-Route::delete('book/delete/{id}', [BookController::class, 'destroyData']);  
-Route::patch('/books', [BookController::class, 'getAll'])->name('getAllBook');
+Route::delete('book/delete/{id}', [BookController::class, 'destroyData']);
+// Route::patch('/books', [BookController::class, 'getAll'])->name('getAllBook');
 
 Route::post('/peminjaman/{id}/approve', [PetugasController::class, 'approve'])->name('peminjaman.approve');
 Route::post('/peminjaman/{id}/reject', [PetugasController::class, 'reject'])->name('peminjaman.reject');

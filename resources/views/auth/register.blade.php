@@ -77,11 +77,11 @@
                       <label class="form-label" for="password">Password</label>
                       <input type="password" class="form-control" name="password" required>
                     </div>
-                    <select class="form-control" id="role" name="role_id" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem; margin-bottom: 2rem;">
+                    {{-- <select class="form-control" id="role" name="role_id" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem; margin-bottom: 2rem;">
                       <option value="1">Admin</option>
                       <option value="2">Petugas</option>
                       <option value="3">Customer</option>
-                  </select>
+                  </select> --}}
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0 form-control">Sign Up</button>
                     </div>

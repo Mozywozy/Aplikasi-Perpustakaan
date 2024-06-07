@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,9 +20,15 @@ class AdminController extends Controller
     public function index()
     {
         $bookCount = Buku::count();
-        $categoryCount = Kategori::count();
-        $userCount = User::count();
-        return view('admin.index_admin', ['book_count' => $bookCount, 'category_count' => $categoryCount, 'user_count' => $userCount]);
+    $categoryCount = Kategori::count();
+    $userCount = User::count();
+    $roles = Role::all();
+    return view('admin.index_admin', [
+        'book_count' => $bookCount,
+        'category_count' => $categoryCount,
+        'user_count' => $userCount,
+        'roles' => $roles,
+    ]);
     }
 
     public function getAll()
@@ -31,22 +39,34 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|max:225',
-            'status' => 'required|in:active,inactive',
-        ]);
+         // Validasi input
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|max:225',
+        'email' => 'required|email|unique:user,email',
+        'password' => 'required|max:225',
+        'role_id' => 'required|exists:role,role_id',
+        'status' => 'required|in:active,inactive',
+    ]);
 
-        // Jika validasi gagal, tampilkan SweetAlert
-        if ($validator->fails()) {
-            Alert::error('Error', 'already exists!');
-            return redirect('admin.index_admin');
-        }
+    // Jika validasi gagal, tampilkan SweetAlert
+    if ($validator->fails()) {
+        Alert::error('Error', 'Validation failed!');
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
 
-        $caregories = User::create($request->all());
-        Alert::success('Success', 'Users added successfully!');
+    $hashedPassword = Hash::make($request->input('password'));
 
-        return redirect('admin.index_admin');
+    // Buat user baru
+    User::create([
+        'username' => $request->username,
+        'email' => $request->email,
+        'password' => $hashedPassword,
+        'role_id' => $request->role_id,
+        'status' => $request->status,
+    ]);
+
+    Alert::success('Success', 'User added successfully!');
+    return redirect()->route('admin.index_admin');
     }
 
     public function updateUser(Request $request, $id)

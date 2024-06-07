@@ -33,7 +33,7 @@ class AuthController extends Controller
             if (Auth::user()->status != 'active') {
                 Alert::warning('Status', 'Your Account is not active yet. please contact admin!');
                 return redirect('login');
-            }   
+            }
         }
 
         $request->session()->regenerate();
@@ -75,7 +75,6 @@ class AuthController extends Controller
             'username' => 'required|max:225',
             'password' => 'required|max:225',
             'email' => 'required|max:50',
-            'role_id' => 'required|in:1,2,3',
         ]);
 
         if ($validator->fails()) {
@@ -83,12 +82,8 @@ class AuthController extends Controller
             return redirect('register');
         }
 
-        if ($request->input('role_id') == 3) {
-            $status = 'active';
-        } else {
-            $status = 'inactive';
-        }
-
+        $role_id = 3;
+        $status = 'active';
         // Hash password
         $hashedPassword = Hash::make($request->input('password'));
 
@@ -97,16 +92,11 @@ class AuthController extends Controller
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => $hashedPassword,
-            'role_id' => $request->input('role_id'),
+            'role_id' => $role_id,
             'status' => $status, // Tetapkan status sesuai dengan logika yang telah ditentukan
         ]);
 
-        // Tampilkan pesan sukses dan arahkan pengguna ke halaman register
-        if ($request->input('role_id') == 3) {
-            Alert::success('Register Success!', 'Please login again..');
-        } else {
-            Alert::success('Register Success!', 'Wait Admin for approval..');
-        }
+        Alert::success('Register Success!', 'Please login again..');
         return redirect('register');
     }
 }

@@ -110,7 +110,9 @@
     </div>
 
     <div class="container-fluid mt-4">
-        <table id="table" data-url="{{ route('getAllUser') }}" data-toggle="table" data-search="true" data-pagination="true">
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
+        <table id="table" data-url="{{ route('getAllUser') }}" data-toggle="table" data-search="true"
+            data-pagination="true">
             <thead>
                 <tr>
                     <th data-formatter="iterator">No</th>
@@ -121,6 +123,54 @@
                 </tr>
             </thead>
         </table>
+    </div>
+
+    <!-- Modal Add User -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('users.store') }}" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role_id" required>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="modal fade" id="editDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -143,8 +193,8 @@
                                 placeholder="Username">
                         </div>
                         <div class="mb-3">
-                          {{-- <label for="edit_status" class="form-label">Status</label> --}}
-                          {{-- <input type="text" class="form-control" id="edit_status" name="status"
+                            {{-- <label for="edit_status" class="form-label">Status</label> --}}
+                            {{-- <input type="text" class="form-control" id="edit_status" name="status"
                               placeholder="Status"> --}}
                             <label for="edit_status" class="form-label">Status</label>
                             <select class="form-control" id="edit_status" name="status">
@@ -160,7 +210,7 @@
             </div>
         </div>
     </div>
-@include('sweetalert::alert')
+    @include('sweetalert::alert')
 @endsection
 
 @push('scripts')
@@ -172,10 +222,15 @@
             search: true
         })
 
-        function iterator(value, row, index){
+        function iterator(value, row, index) {
             return index + 1;
         }
 
+        $(document).ready(function() {
+            $('.btn-edit-profile').click(function() {
+                $('#editProfileModal').modal('show');
+            });
+        });
 
         function buttonFormatter(value, row) {
             // console.log(row);
@@ -186,9 +241,9 @@
         $(document).on('click', '.btn-edit', function() {
             var userId = $(this).data('id');
             var username = $(this).closest('tr').find('td:eq(1)')
-                .text(); 
+                .text();
             var status = $(this).closest('tr').find('td:eq(3)')
-                .text(); 
+                .text();
             // Set value of edit_nama_user input field
             $('#edit_nama_user').val(username.trim());
             // Set value of edit_status select field
@@ -199,8 +254,8 @@
             $('#editDataModal').modal('show');
         });
 
-       // Event handler for form submission
-       $('#editDataForm').submit(function(event) {
+        // Event handler for form submission
+        $('#editDataForm').submit(function(event) {
             event.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
@@ -250,8 +305,8 @@
             return value;
         }
 
-         // Function to handle delete action
-         function deleteData(button) {
+        // Function to handle delete action
+        function deleteData(button) {
             var userId = $(button).data('id');
 
             // Prompt confirmation dialog using SweetAlert

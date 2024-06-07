@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::get('books', [BookController::class, 'getAll']);
         Route::get('book-add', [BookController::class, 'add']);
         Route::post('book-add', [BookController::class, 'store']);
+        Route::post('/users', [AdminController::class, 'store'])->name('users.store');
         Route::get('book-edit/{id}', [BookController::class, 'edit']);
         Route::put('book-edit/{id}', [BookController::class, 'update'])->name('book.update');
         Route::delete('book/delete/{id}', [BookController::class, 'destroyData'])->name('book.delete');

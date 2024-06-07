@@ -31,27 +31,47 @@ class CustomerApiController extends Controller
 
     public function getAllBook(Request $request)
     {
-        $categories = Kategori::all();
+        // $categories = Kategori::all();
 
-        $books = Buku::when($request->judul, function ($query, $judul) {
-            return $query->where('judul', 'like', '%' . $judul . '%');
-        })
-            ->when($request->kategori, function ($query, $kategori) {
-                return $query->whereHas('kategori', function ($q) use ($kategori) {
-                    $q->where('kategori.kategori_id', $kategori);
-                });
-            })
-            ->with('kategori') // Load the relation
+        // $books = Buku::when($request->judul, function ($query, $judul) {
+        //     return $query->where('judul', 'like', '%' . $judul . '%');
+        // })
+        //     ->when($request->kategori, function ($query, $kategori) {
+        //         return $query->whereHas('kategori', function ($q) use ($kategori) {
+        //             $q->where('kategori.kategori_id', $kategori);
+        //         });
+        //     })
+        //     ->with('kategori') // Load the relation
+        //     ->get();
+
+        // $ratings = UlasanBuku::select('buku_id', DB::raw('AVG(rating) as average_rating'))
+        //     ->groupBy('buku_id')
+        //     ->get()
+        //     ->keyBy('buku_id');
+
+        // foreach ($books as $book) {
+        //     $book->average_rating = $ratings->has($book->buku_id) ? $ratings[$book->buku_id]->average_rating : 0;
+        // }
+
+        // $formattedBooks = $books->map(function ($book) {
+        //     return [
+        //         'buku_id' => $book->buku_id,
+        //         'judul' => $book->judul,
+        //         'penerbit' => $book->penerbit,
+        //         'status' => $book->status,
+        //         'stock' => $book->stock,
+        //         'cover' => $book->cover,
+        //         'kategori' => $book->kategori->map(function ($category) {
+        //             return [
+        //                 'kategori_id' => $category->kategori_id,
+        //                 'nama_kategori' => $category->nama_kategori,
+        //             ];
+        //         }),
+        //         'average_rating' => $book->average_rating,
+        //     ];
+        // });
+        $books = Buku::with('kategori') // Load the relation
             ->get();
-
-        $ratings = UlasanBuku::select('buku_id', DB::raw('AVG(rating) as average_rating'))
-            ->groupBy('buku_id')
-            ->get()
-            ->keyBy('buku_id');
-
-        foreach ($books as $book) {
-            $book->average_rating = $ratings->has($book->buku_id) ? $ratings[$book->buku_id]->average_rating : 0;
-        }
 
         $formattedBooks = $books->map(function ($book) {
             return [
@@ -67,11 +87,11 @@ class CustomerApiController extends Controller
                         'nama_kategori' => $category->nama_kategori,
                     ];
                 }),
-                'average_rating' => $book->average_rating,
+                'average_rating' => $book->average_rating ?? 0, // Default to 0 if not present
             ];
         });
 
-        return response()->json(['categories' => $categories, 'books' => $formattedBooks]);
+        return response()->json(['books' => $formattedBooks]);
     }
 
 

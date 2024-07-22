@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'only_customer' => \App\Http\Middleware\OnlyCustomer::class,
         'only_petugas' => \App\Http\Middleware\OnlyPetugas::class,
         'only_guest' => \App\Http\Middleware\OnlyGuest::class,
+        'auth.token' => \App\Http\Middleware\EnsureTokenIsValid::class,
     ];
 }

@@ -8,10 +8,12 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\UlasanBuku;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CustomerApiController extends Controller
 {
@@ -94,46 +96,69 @@ class CustomerApiController extends Controller
         return response()->json(['books' => $formattedBooks]);
     }
 
-
-    public function profile()
+    public function profile(Request $request)
     {
-        $user = auth()->user();
+        $user = $request->user();
 
-        $today = now()->toDateString();
+        if (!$user) {
+            Log::error('User not authenticated or user ID not found in request');
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        Log::info('Profile endpoint hit', ['user_id' => $user->user_id]);
+
+        // Update statuses based on the return date
+        $today = Carbon::now()->toDateString();
         Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'approved')
             ->where('tanggal_pengembalian', '<=', $today)
             ->update(['status' => 'buku harus dikembalikan']);
+        Log::info('Status updated for overdue books');
 
         $peminjamanPending = Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'pending')
             ->with('buku')
             ->get();
+        Log::info('Pending loans retrieved', ['peminjamanPending' => $peminjamanPending]);
 
         $peminjamanApproved = Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'approved')
             ->with('buku')
             ->get();
+        Log::info('Approved loans retrieved', ['peminjamanApproved' => $peminjamanApproved]);
 
         $peminjamanRejected = Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'rejected')
             ->with('buku')
             ->get();
+        Log::info('Rejected loans retrieved', ['peminjamanRejected' => $peminjamanRejected]);
 
         $peminjamanReturned = Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'buku sudah dikembalikan')
             ->with('buku')
             ->get();
+        Log::info('Returned loans retrieved', ['peminjamanReturned' => $peminjamanReturned]);
 
         $peminjamanMustReturn = Peminjaman::where('user_id', $user->user_id)
             ->where('status', 'buku harus dikembalikan')
             ->with('buku')
             ->get();
+        Log::info('Must return loans retrieved', ['peminjamanMustReturn' => $peminjamanMustReturn]);
 
         $ulasan = UlasanBuku::where('user_id', $user->user_id)->get();
+        Log::info('Reviews retrieved', ['ulasan' => $ulasan]);
 
-        return response()->json(compact('peminjamanPending', 'peminjamanApproved', 'peminjamanRejected', 'peminjamanMustReturn', 'peminjamanReturned', 'user', 'ulasan'));
+        return response()->json([
+            'user' => $user,
+            'peminjamanPending' => $peminjamanPending,
+            'peminjamanApproved' => $peminjamanApproved,
+            'peminjamanRejected' => $peminjamanRejected,
+            'peminjamanReturned' => $peminjamanReturned,
+            'peminjamanMustReturn' => $peminjamanMustReturn,
+            'ulasan' => $ulasan,
+        ]);
     }
+
 
     public function updateProfile(Request $request, $id)
     {
@@ -166,7 +191,7 @@ class CustomerApiController extends Controller
 
     public function storePeminjaman(Request $request)
     {
-        $userId = Auth::id();
+        $userId = $request->input('user_id'); // Mengambil user_id dari inputan
         $bukuId = $request->input('buku_id');
 
         $existingPeminjaman = Peminjaman::where('user_id', $userId)

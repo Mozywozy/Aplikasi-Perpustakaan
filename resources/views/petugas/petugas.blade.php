@@ -87,7 +87,7 @@
                         <th data-formatter="buttonFormatter">Action</th>
                     </tr>
                 </thead>
-                
+
             </table>
         </div>
     </div>
@@ -113,6 +113,10 @@
                             <label for="penerbit" class="form-label">Penerbit</label>
                             <input type="text" class="form-control" id="edit-penerbit" name="penerbit"
                                 placeholder="Penerbit disini" style="border: 3px solid #dee2e6; padding: 0.375rem 0.75rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="sinopsis">Sinopsis</label>
+                            <textarea name="sinopsis" id="sinopsis" class="form-control" rows="5" style="border: 3px solid #dee2e6; padding: 0.375rem 0.75rem;"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
@@ -154,7 +158,7 @@
         </div>
     </div>
 
-    
+
 
     @include('sweetalert::alert')
 @endsection
@@ -186,14 +190,15 @@
             // Assuming row.cover is the cover image path
             var coverImage = row.cover ? `/storage/covers/${row.cover}` : ''; // Adjust path as needed
 
-            return `<button class='btn btn-warning btn-edit' 
-                    data-id='${row.buku_id}' 
-                    data-judul='${row.judul}' 
-                    data-penerbit='${row.penerbit}' 
-                    data-status='${row.status}' 
-                    data-stock='${row.stock}' 
-                    data-cover='${coverImage}' 
-                    data-kategori='${JSON.stringify(kategoriIds)}' 
+            return `<button class='btn btn-warning btn-edit'
+                    data-id='${row.buku_id}'
+                    data-judul='${row.judul}'
+                    data-penerbit='${row.penerbit}'
+                    data-sinopsis='${row.sinopsis}'
+                    data-status='${row.status}'
+                    data-stock='${row.stock}'
+                    data-cover='${coverImage}'
+                    data-kategori='${JSON.stringify(kategoriIds)}'
                     data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>` +
                 ` <button class='btn btn-danger' data-id='${row.buku_id}' onclick='deleteData(this)'>Delete</button>` + ` <a href='/book/${row.buku_id}/reviews' class='btn btn-info'>Reviews</a> `;
         }
@@ -204,6 +209,7 @@
             var bukuId = $(this).data('id');
             var judul = $(this).data('judul');
             var penerbit = $(this).data('penerbit');
+            var sinopsis = $(this).data('sinopsis');
             var status = $(this).data('status');
             var stock = $(this).data('stock');
             var kategori = $(this).data('kategori');
@@ -213,6 +219,7 @@
             $('#buku_id').val(bukuId);
             $('#edit-judul').val(judul);
             $('#edit-penerbit').val(penerbit);
+            $('#edit-sinopsis').val(sinopsis);
             $('#edit-status').val(status);
             $('#edit-stock').val(stock);
             $('#edit-kategori').val(kategori).trigger('change'); // Pilih kategori menggunakan Select2

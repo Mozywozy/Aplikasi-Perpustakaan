@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
@@ -174,6 +175,10 @@ class AdminController extends Controller
             }
 
             $peminjaman->save();
+
+            DB::table('buku')
+                ->where('buku_id', $peminjaman->buku_id)
+                ->decrement('stock', 1);
 
             Alert::success('Success', 'Peminjaman buku telah disetujui.');
             return redirect()->back()->with('success', 'Peminjaman buku telah disetujui.');

@@ -17,6 +17,10 @@
             <input type="text" class="form-control" id="penerbit" name="penerbit" placeholder="Penerbit disini"
                 style="border: 3px solid #dee2e6; padding: 0.375rem 0.75rem;">
         </div>
+        <div class="form-group">
+            <label for="sinopsis">Sinopsis</label>
+            <textarea name="sinopsis" id="sinopsis" class="form-control" rows="5" style="border: 3px solid #dee2e6; padding: 0.375rem 0.75rem;"></textarea>
+        </div>
         <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select class="form-select" id="status" name="status" style="border: 3px solid #dee2e6; padding: 0.375rem 0.75rem;">
@@ -61,6 +65,6 @@
             $('.select-multiple').select2();
         })
 
-        
+
     </script>
 @endpush

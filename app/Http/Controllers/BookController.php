@@ -45,6 +45,7 @@ class BookController extends Controller
         $validator = Validator::make($request->all(), [
             'judul' => 'required|max:100',
             'penerbit' => 'required|max:100',
+            'sinopsis' => 'nullable|string',
             'status' => 'required|in:In Stock,Out Stock',
             'stock' => 'required|integer|min:0',
             'kategori_id' => 'required|array', // Pastikan kategori_id adalah array
@@ -71,6 +72,7 @@ class BookController extends Controller
         $book = new Buku();
         $book->judul = $request->judul;
         $book->penerbit = $request->penerbit;
+        $book->sinopsis = $request->sinopsis;
         $book->status = $status;
         $book->stock = $request->stock;
         $book->cover = $newName;
@@ -113,6 +115,7 @@ class BookController extends Controller
         // Perbarui atribut-atribut buku sesuai data yang diterima
         $book->judul = $request->judul;
         $book->penerbit = $request->penerbit;
+        $book->sinopsis = $request->sinopsis;
         $book->status = $request->status;
         $book->stock = $request->stock;
         // Tentukan status berdasarkan stok

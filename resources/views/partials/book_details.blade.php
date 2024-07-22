@@ -1,4 +1,4 @@
-@extends('layouts.customer')
+@extends('layouts.detail_book')
 
 @section('title', 'Detail Buku')
 
@@ -45,6 +45,7 @@
             <div class="col-md-8">
                 <h2>{{ $book->judul }}</h2>
                 <p>Penerbit: {{ $book->penerbit }}</p>
+                <p>Sinopsis: {{ $book->sinopsis }}</p>
                 <p>Stock: {{ $book->stock }}</p>
                 <!-- Form pinjam buku -->
                 <form action="{{ route('peminjaman.store') }}" method="POST">

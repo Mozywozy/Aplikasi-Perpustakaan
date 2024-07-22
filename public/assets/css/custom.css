@@ -1,0 +1,21 @@
+/* custom.css */
+.nav-wrapper {
+    background-color: #3949ab;
+}
+
+.brand-logo {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+.nav-wrapper ul li a {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.nav-wrapper ul li a:hover {
+    background-color: #5c6bc0;
+}
+
+

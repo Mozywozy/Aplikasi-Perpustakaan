@@ -5,12 +5,12 @@
 @section('content')
 
 <style>
-   
+
 </style>
 
 <main>
     {{-- FIRTS CONTENT --}}
-    <section class="hero">
+    <section class="hero">  
         <div class="content">
             <div class="text-content">
                 <h1 class="judul">Perpustakaan</h1>
@@ -63,7 +63,7 @@
             </div>
         </div>
     </section>
-</main>    
+</main>
 
 @include('sweetalert::alert')
 

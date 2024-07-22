@@ -40,7 +40,6 @@ Route::middleware('only_guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-
     // Route::get('login', [AuthController::class, 'login'])->name('login');
     // Route::post('login', [AuthController::class, 'authenticating'])->name('proses_login');
     // Route::get('register', [AuthController::class, 'register']);
@@ -48,10 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('confirm-logout', [AuthController::class, 'confirmLogout'])->name('confirm.logout');
 
+    // ROUTE ADMIN
     Route::middleware(['only_admin'])->group(function () {
         Route::get('admin.index_admin', [AdminController::class, 'index'])->name('admin.index_admin');
         Route::get('admin.books', [BookController::class, 'index'])->name('admin.books');
         Route::get('admin.category', [CategoryController::class, 'index'])->name('admin.category');
+        // kategori admin
         Route::post('admin.category', [CategoryController::class, 'store']);
         Route::put('admin.category/{id}', [CategoryController::class, 'updateData']);
         Route::delete('kategori/delete/{id}', [CategoryController::class, 'destroyData'])->name('categories.delete');
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::post('admin.index_admin', [AdminController::class, 'store']);
         Route::delete('admin/delete/{id}', [UserController::class, 'destroyData'])->name('user.delete');
 
+        // route buku admin
         Route::get('books', [BookController::class, 'getAll']);
         Route::get('book-add', [BookController::class, 'add']);
         Route::post('book-add', [BookController::class, 'store']);
@@ -67,6 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::get('book-edit/{id}', [BookController::class, 'edit']);
         Route::put('book-edit/{id}', [BookController::class, 'update'])->name('book.update');
         Route::delete('book/delete/{id}', [BookController::class, 'destroyData'])->name('book.delete');
+        // peminjaman admin
         Route::get('peminjaman', [AdminController::class, 'rent'])->name('admin.peminjaman');
         Route::get('data-pinjam', [AdminController::class, 'dataRent'])->name('admin.data-rent');
         Route::get('book/admin/{id}/reviews', [AdminController::class, 'showReviews'])->name('admin.reviews');

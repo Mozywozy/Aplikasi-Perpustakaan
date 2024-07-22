@@ -13,23 +13,26 @@ use Illuminate\Support\Str;
 class AuthApiController extends Controller
 {
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            if (Auth::user()->status != 'active') {
-                return response()->json(['message' => 'Your Account is not active yet. Please contact admin!'], 403);
-            }
-
-            $token = Auth::user()->createToken('authToken')->plainTextToken;
-            return response()->json(['token' => $token], 200);
+    if (Auth::attempt($credentials)) {
+        if (Auth::user()->status != 'active') {
+            return response()->json(['message' => 'Your Account is not active yet. Please contact admin!'], 403);
         }
 
-        return response()->json(['message' => 'Invalid email or password!'], 401);
+        $token = Auth::user()->createToken('authToken')->plainTextToken;
+        $user_id = Auth::user()->user_id; // Get the user_id
+
+        return response()->json(['token' => $token, 'user_id' => $user_id], 200);
     }
+
+    return response()->json(['message' => 'Invalid email or password!'], 401);
+}
+
 
     public function logout(Request $request)
     {
